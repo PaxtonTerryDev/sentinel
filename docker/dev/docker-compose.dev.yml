@@ -1,8 +1,8 @@
 services:
   sentinel-auth:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ../..
+      dockerfile: docker/dev/Dockerfile.dev
     ports:
       - "8080:8080"
     environment:
@@ -18,7 +18,7 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - .:/app
+      - ../..:/app
       - /app/tmp
     working_dir: /app
     networks:
@@ -35,7 +35,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
-      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ../../scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - sentinel-network
     healthcheck:
