@@ -12,10 +12,10 @@ git clone <repository-url>
 cd sentinel
 
 # Start development environment
-docker compose -f docker-compose.dev.yml up -d
+docker compose -f docker/dev/docker-compose.dev.yml up -d
 
 # View logs
-docker compose -f docker-compose.dev.yml logs -f
+docker compose -f docker/dev/docker-compose.dev.yml logs -f
 ```
 
 The development environment includes:
@@ -31,14 +31,14 @@ git clone <repository-url>
 cd sentinel
 
 # Copy and configure production environment
-cp .env.prod .env.prod.local
+cp docker/prod/.env.prod .env.prod.local
 # Edit .env.prod.local with your secure values
 
 # Start production environment
-docker-compose -f docker-compose.prod.yml --env-file .env.prod.local up -d
+docker compose -f docker/prod/docker-compose.prod.yml --env-file .env.prod.local up -d
 
 # View logs
-docker-compose -f docker-compose.prod.yml logs -f
+docker compose -f docker/prod/docker-compose.prod.yml logs -f
 ```
 
 ## Environment Configuration
