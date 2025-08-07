@@ -2,11 +2,14 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
 	"sentinel/internal/auth"
 	"sentinel/internal/models"
+
+	"github.com/google/uuid"
 )
 
 type AuthHandler struct {
@@ -90,6 +93,62 @@ func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 	w.Write([]byte(`{"message":"Logout endpoint - to be implemented"}`))
+}
+
+func (h *AuthHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	userID, err := h.getUserIDFromRequest(r)
+	if err != nil {
+		http.Error(w, `{"error":"Invalid user ID"}`, http.StatusBadRequest)
+		return
+	}
+
+	var req models.UpdateUserRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, `{"error":"Invalid JSON"}`, http.StatusBadRequest)
+		return
+	}
+
+	userResponse, err := h.authService.UpdateUser(userID, &req)
+	if err != nil {
+		log.Printf("Update user failed: %v", err)
+		
+		status := http.StatusBadRequest
+		if err.Error() == "user not found" {
+			status = http.StatusNotFound
+		}
+		
+		errorResp := map[string]string{"error": err.Error()}
+		w.WriteHeader(status)
+		json.NewEncoder(w).Encode(errorResp)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"message": "User updated successfully",
+		"user":    userResponse,
+	})
+}
+
+func (h *AuthHandler) getUserIDFromRequest(r *http.Request) (uuid.UUID, error) {
+	// TODO: CRITICAL - Replace before production release
+	// This is a temporary implementation for development/testing only
+	// In production, user ID should be extracted from:
+	// - JWT token claims (preferred)
+	// - Authenticated session
+	// - Authorization middleware
+	// Current implementation is INSECURE - any user can update any other user
+	userIDStr := r.URL.Query().Get("user_id")
+	if userIDStr == "" {
+		return uuid.Nil, fmt.Errorf("user_id parameter required")
+	}
+	
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("invalid user ID format")
+	}
+	
+	return userID, nil
 }
 
 func (h *AuthHandler) OAuthCallback(w http.ResponseWriter, r *http.Request) {

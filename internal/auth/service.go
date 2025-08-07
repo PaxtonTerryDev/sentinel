@@ -126,6 +126,60 @@ func (s *AuthService) LoginUser(email, plainPassword string) (*models.UserRespon
 	}, nil
 }
 
+func (s *AuthService) UpdateUser(userID uuid.UUID, req *models.UpdateUserRequest) (*models.UserResponse, error) {
+	if err := s.validator.Struct(req); err != nil {
+		return nil, fmt.Errorf("validation failed: %w", err)
+	}
+
+	user, err := s.userRepo.GetByID(userID)
+	if err != nil {
+		return nil, fmt.Errorf("user not found")
+	}
+
+	// Check email uniqueness if email is being updated
+	if req.Email != nil {
+		normalizedEmail := strings.ToLower(strings.TrimSpace(*req.Email))
+		if normalizedEmail != user.Email {
+			exists, err := s.userRepo.Exists(normalizedEmail)
+			if err != nil {
+				return nil, fmt.Errorf("failed to check email availability: %w", err)
+			}
+			if exists {
+				return nil, fmt.Errorf("email %s is already in use", normalizedEmail)
+			}
+			user.Email = normalizedEmail
+		}
+	}
+
+	if req.FirstName != nil {
+		user.FirstName = req.FirstName
+	}
+	if req.LastName != nil {
+		user.LastName = req.LastName
+	}
+	if req.IsActive != nil {
+		user.IsActive = *req.IsActive
+	}
+	if req.IsVerified != nil {
+		user.IsVerified = *req.IsVerified
+	}
+
+	if err := s.userRepo.Update(user); err != nil {
+		return nil, fmt.Errorf("failed to update user: %w", err)
+	}
+
+	return &models.UserResponse{
+		ID:         user.ID,
+		Email:      user.Email,
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		IsActive:   user.IsActive,
+		IsVerified: user.IsVerified,
+		CreatedAt:  user.CreatedAt,
+		LastLogin:  user.LastLogin,
+	}, nil
+}
+
 func (s *AuthService) validateRegistrationRequest(req *models.CreateUserRequest) error {
 	if err := s.validator.Struct(req); err != nil {
 		return err

@@ -26,6 +26,16 @@ type CreateUserRequest struct {
 	LastName  *string `json:"last_name"`
 }
 
+type UpdateUserRequest struct {
+	Email      *string `json:"email" validate:"omitempty,email"`
+	FirstName  *string `json:"first_name"`
+	LastName   *string `json:"last_name"`
+	IsActive   *bool   `json:"is_active"`
+	IsVerified *bool   `json:"is_verified"`
+	// Note: ID, PasswordHash, CreatedAt, UpdatedAt are not updatable via this endpoint
+	// Password changes should go through a separate change-password endpoint
+}
+
 type UserResponse struct {
 	ID         uuid.UUID  `json:"id"`
 	Email      string     `json:"email"`

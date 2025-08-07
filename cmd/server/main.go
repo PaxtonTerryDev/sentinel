@@ -47,6 +47,7 @@ func main() {
 	authRoutes.HandleFunc("/refresh", authHandler.RefreshToken).Methods("POST")
 	authRoutes.HandleFunc("/logout", authHandler.Logout).Methods("POST")
 	authRoutes.HandleFunc("/oauth/callback", authHandler.OAuthCallback).Methods("GET")
+	authRoutes.HandleFunc("/user", authHandler.UpdateUser).Methods("PUT")
 
 	log.Printf("Server starting on port %s", cfg.Port)
 	log.Fatal(http.ListenAndServe(":"+cfg.Port, r))
