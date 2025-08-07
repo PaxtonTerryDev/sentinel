@@ -1,0 +1,63 @@
+services:
+  sentinel-auth:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - ENVIRONMENT=development
+      - JWT_SECRET=dev-secret-key-change-me
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=sentinel_dev
+      - DB_USER=sentinel_user
+      - DB_PASSWORD=dev_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/tmp
+    working_dir: /app
+    networks:
+      - sentinel-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=sentinel_dev
+      - POSTGRES_USER=sentinel_user
+      - POSTGRES_PASSWORD=dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - sentinel-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentinel_user -d sentinel_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  adminer:
+    image: adminer:4.8.1
+    ports:
+      - "8081:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    networks:
+      - sentinel-network
+    restart: unless-stopped
+
+volumes:
+  postgres_dev_data:
+
+networks:
+  sentinel-network:
+    driver: bridge

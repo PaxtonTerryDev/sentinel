@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+DEPLOYMENT.md
+*.md
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Development files
+.vscode
+.idea
+
+# Logs
+*.log
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Go
+vendor/
+
+# Temporary files (but allow tmp/ for air hot reload in dev)
+temp/
+
+# Air hot reload files
+build-errors.log
