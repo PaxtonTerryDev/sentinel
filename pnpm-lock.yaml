@@ -32,6 +32,9 @@ importers:
       '@ptdlib/quicklog':
         specifier: ^1.0.2
         version: 1.0.2
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       hono:
         specifier: ^4.11.7
         version: 4.11.7
