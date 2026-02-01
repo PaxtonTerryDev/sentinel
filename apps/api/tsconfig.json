@@ -1,6 +1,12 @@
 {
   "extends": "@workspace/typescript-config/base.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@lib": ["./src/lib/*"],
+      "@db": ["./src/lib/database/*"],
+    },
     "target": "ES2023",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -9,12 +15,10 @@
     "esModuleInterop": true,
     "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }
