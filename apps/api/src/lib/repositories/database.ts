@@ -1,9 +1,9 @@
-import { PrismaClient } from "@/generated/prisma/client";
+import type { PrismaClient } from "@workspace/database";
 import { createDatabaseConnection } from "../utils/database/create-database-connection";
 
 export class Database {
   private static conn: PrismaClient | undefined;
-  private db: PrismaClient;
+  protected db: PrismaClient;
 
   constructor() {
     if (!Database.conn) {
