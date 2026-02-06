@@ -3,9 +3,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@lib": ["./src/lib/*"],
-      "@db": ["./src/lib/database/*"],
+      "@/*": [
+        "./*"
+      ],
+      "@lib": [
+        "./src/lib/*"
+      ]
     },
     "target": "ES2023",
     "module": "ESNext",
@@ -13,12 +16,15 @@
     "strict": true,
     "verbatimModuleSyntax": true,
     "esModuleInterop": true,
-    "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
-    "types": ["node"],
-    "jsx": "react-jsx",
+    "types": [
+      "node"
+    ],
     "jsxImportSource": "hono/jsx",
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
