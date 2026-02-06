@@ -29,12 +29,6 @@ importers:
       '@hono/node-server':
         specifier: ^1.19.9
         version: 1.19.9(hono@4.11.7)
-      '@prisma/adapter-pg':
-        specifier: ^7.3.0
-        version: 7.3.0
-      '@prisma/client':
-        specifier: ^7.3.0
-        version: 7.3.0(prisma@7.3.0(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.9.3))(typescript@5.9.3)
       '@ptdlib/quicklog':
         specifier: ^1.0.2
         version: 1.0.2
@@ -44,19 +38,16 @@ importers:
       hono:
         specifier: ^4.11.7
         version: 4.11.7
-      pg:
-        specifier: ^8.18.0
-        version: 8.18.0
     devDependencies:
       '@types/node':
         specifier: ^20.11.17
         version: 20.19.25
-      '@types/pg':
-        specifier: ^8.16.0
-        version: 8.16.0
-      prisma:
-        specifier: ^7.3.0
-        version: 7.3.0(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.9.3)
+      '@workspace/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@workspace/types':
+        specifier: 'workspace: *'
+        version: link:../../packages/types
       tsx:
         specifier: ^4.7.1
         version: 4.21.0
@@ -113,6 +104,37 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/database:
+    dependencies:
+      '@prisma/adapter-pg':
+        specifier: ^7.3.0
+        version: 7.3.0
+      '@prisma/client':
+        specifier: ^7.3.0
+        version: 7.3.0(prisma@7.3.0(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.9.3))(typescript@5.9.3)
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
+      pg:
+        specifier: ^8.18.0
+        version: 8.18.0
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.17
+        version: 20.19.25
+      '@types/pg':
+        specifier: ^8.16.0
+        version: 8.16.0
+      prisma:
+        specifier: ^7.3.0
+        version: 7.3.0(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.9.3)
+      tsx:
+        specifier: ^4.7.1
+        version: 4.21.0
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
@@ -154,6 +176,12 @@ importers:
       typescript-eslint:
         specifier: ^8.39.0
         version: 8.39.0(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.2)
+
+  packages/types:
+    devDependencies:
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/typescript-config: {}
 

@@ -1,4 +1,4 @@
-import { User } from "../../../generated/prisma/browser.js"
+import type { User } from "@workspace/database"
 import { Repository } from "./repository.js"
 
 export class UserRepository extends Repository {
