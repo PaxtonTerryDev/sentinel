@@ -32,12 +32,18 @@ importers:
       '@ptdlib/quicklog':
         specifier: ^1.0.2
         version: 1.0.2
+      '@workspace/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
       hono:
         specifier: ^4.11.7
         version: 4.11.7
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
     devDependencies:
       '@types/node':
         specifier: ^20.11.17
@@ -45,9 +51,6 @@ importers:
       '@workspace/database':
         specifier: workspace:*
         version: link:../../packages/database
-      '@workspace/types':
-        specifier: 'workspace: *'
-        version: link:../../packages/types
       tsx:
         specifier: ^4.7.1
         version: 4.21.0
@@ -178,6 +181,10 @@ importers:
         version: 8.39.0(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.2)
 
   packages/types:
+    dependencies:
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
     devDependencies:
       typescript:
         specifier: ^5.9.3
