@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../../generated/prisma/client.js";
+import { PrismaClient } from "@/generated/prisma/client.js";
 
 export class Repository {
   protected db: PrismaClient;

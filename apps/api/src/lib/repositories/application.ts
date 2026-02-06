@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../../generated/prisma/client.js";
+import type { User } from "@/generated/prisma/browser.js";
 import { Repository } from "./repository.js";
 
 // TODO: Move to shared types file
