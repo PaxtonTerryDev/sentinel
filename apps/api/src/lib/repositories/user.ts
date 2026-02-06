@@ -1,12 +1,7 @@
-import type { PrismaClient, User } from "@/generated/prisma/client";
+import { User } from "../../../generated/prisma/browser.js"
+import { Repository } from "./repository.js"
 
-export class UserRepository {
-  private db: PrismaClient;
-
-  constructor(db: PrismaClient) {
-    this.db = db;
-  }
-
+export class UserRepository extends Repository {
   async create(): Promise<User> {
     return this.db.user.create({})
   }
