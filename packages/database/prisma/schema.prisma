@@ -17,7 +17,6 @@ model User {
   id             String          @id @default(uuid())
   userCredential UserCredential?
 
-  applications        Application[]
   usersOnApplications UsersOnApplications[]
 
   @@map("user")
@@ -48,7 +47,6 @@ model Application {
   id          String @id @default(uuid())
   displayName String @map("display_name")
 
-  users               User[]
   usersOnApplications UsersOnApplications[]
 
   @@map("application")
@@ -61,5 +59,6 @@ model UsersOnApplications {
   applicationId String
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
+  @@map("users_on_applications")
   @@id([userId, applicationId])
 }
