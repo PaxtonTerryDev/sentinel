@@ -13,10 +13,14 @@
     "./client": {
       "types": "./generated/prisma/client.ts",
       "import": "./generated/prisma/client.ts"
+    },
+    "./connection": {
+      "types": "./index.ts",
+      "import": "./index.ts"
     }
   },
   "scripts": {
-    "build": "npx prisma generate",
+    "build": "npx prisma generate && tsc",
     "dev": "npx prisma dev --name sentinel"
   },
   "keywords": [],
