@@ -7,7 +7,7 @@ const db = new Database();
 
 export async function createUser(request: EmailCreateUserRequest | OauthCreateUserRequest): Promise<User> {
   switch (request.type) {
-    case "LEGACY":
+    case "EMAIL":
       return createEmailUser(request);
     case "OAUTH":
       return createOAuthUser(request);

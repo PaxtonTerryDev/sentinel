@@ -5,7 +5,7 @@ export const oauthProviderSchema = z.enum(["GOOGLE", "AZURE", "GITHUB"]);
 export type OAuthProvider = z.infer<typeof oauthProviderSchema>;
 
 export const emailCreateUserRequestSchema = z.object({
-  type: z.literal("LEGACY"),
+  type: z.literal("EMAIL"),
   email: z.string().email(),
   password: z.string(),
 });
