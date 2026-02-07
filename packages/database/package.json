@@ -20,7 +20,7 @@
     }
   },
   "scripts": {
-    "build": "npx prisma generate && tsc",
+    "build": "npx prisma generate",
     "dev": "npx prisma dev --name sentinel"
   },
   "keywords": [],
