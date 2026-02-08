@@ -12,7 +12,6 @@ export const emailCreateUserRequestSchema = z.object({
 
 export type EmailCreateUserRequest = z.infer<typeof emailCreateUserRequestSchema>
 
-
 export const oauthCreateUserRequestSchema = z.object({
   type: z.literal("OAUTH"),
   provider: oauthProviderSchema,
