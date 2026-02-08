@@ -10,14 +10,15 @@ interface PaginationRequest {
 // TODO: we are just using default offset pagination for now -> eventually, we will want to move to cursor based pagination once we introduce caching
 export class ApplicationRepository extends Repository {
   async getApplicationUsers(id: string, pagination?: PaginationRequest): Promise<User[]> {
-    return this.db.application.findMany({
-      ...pagination, // only includes if provided
-      include: {
-        users: true,
-      },
+    const result = await this.db.usersOnApplications.findMany({
+      ...pagination,
       where: {
-        id
+        applicationId: id
+      },
+      include: {
+        user: true
       }
     })
+    return result.map((r) => r.user)
   }
 }
