@@ -9,9 +9,9 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@workspace/types": "workspace:*",
     "@hono/node-server": "^1.19.9",
     "@ptdlib/quicklog": "^1.0.2",
-    "@workspace/types": "workspace:*",
     "dotenv": "^17.2.3",
     "hono": "^4.11.7",
     "zod": "^3.25.76"
