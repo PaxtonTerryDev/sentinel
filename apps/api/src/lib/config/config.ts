@@ -1,12 +1,12 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 class ConfigError extends Error {
   override message: string;
 
   constructor(message: string) {
-    super(message)
+    super(message);
     this.message = message;
   }
 }
@@ -22,7 +22,7 @@ function env(variable: string, fallback?: string): string {
 }
 
 export const config = {
-  port: parseInt(env("SERVER_PORT"))
-}
+  port: parseInt(env("SERVER_PORT")),
+};
 
 export type Config = typeof config;

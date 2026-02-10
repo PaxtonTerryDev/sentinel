@@ -20,9 +20,9 @@
     }
   },
   "scripts": {
-    "build": "npx prisma generate",
-    "dev": "npx prisma dev --name sentinel",
-    "migrate": "pnpx prisma migrate dev"
+    "build": "pnpm run generate",
+    "migrate": "pnpx prisma migrate dev",
+    "generate": "pnpx prisma generate"
   },
   "keywords": [],
   "author": "",
