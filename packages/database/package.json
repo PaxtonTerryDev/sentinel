@@ -21,7 +21,8 @@
   },
   "scripts": {
     "build": "npx prisma generate",
-    "dev": "npx prisma dev --name sentinel"
+    "dev": "npx prisma dev --name sentinel",
+    "migrate": "pnpx prisma migrate dev"
   },
   "keywords": [],
   "author": "",
