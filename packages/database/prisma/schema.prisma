@@ -11,60 +11,120 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["public", "auth"]
+}
+
+enum IdentityProvider {
+  INTERNAL
+  GOOGLE
+
+  @@map("IDENTITY_PROVIDER")
 }
 
 model User {
-  id             String          @id @default(uuid())
-  userCredential UserCredential?
+  id    String @id @default(uuid())
+  email String @unique
 
-  usersOnApplications UsersOnApplications[]
+  identities   Identity[]
+  applications UsersOnApplications[]
+  sessions     Session[]
 
   @@map("user")
-  @@schema("public")
 }
 
-model Credential {
-  id             String          @id @default(uuid())
-  email          String          @unique
-  emailVerified  Boolean         @default(false) @map("email_verified")
-  passwordHash   String          @map("password_hash")
-  userCredential UserCredential?
+model Identity {
+  id             String           @id @default(uuid())
+  provider       IdentityProvider
+  userId         String           @map("user_id")
+  providerUserId String?          @map("provider_user_id")
+  accessToken    String?          @map("access_token")
+  refreshToken   String?          @map("refresh_token")
+  tokenExpiresAt DateTime?        @map("token_expires_at")
+  metadata       Json             @default("{}")
 
-  @@map("credential")
-  @@schema("auth")
+  internalIdentityId String?           @unique @map("internal_identity_id")
+  internalIdentity   InternalIdentity? @relation(fields: [internalIdentityId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, userId])
+  @@map("identity")
 }
 
-model UserCredential {
-  id           String @id @default(uuid())
-  userId       String @unique @map("user_id")
-  credentialId String @unique @map("credential_id")
+model InternalIdentity {
+  id            String  @id @default(uuid())
+  passwordHash  String  @map("password_hash")
+  emailVerified Boolean @default(false) @map("email_verified")
 
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  credential Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  firstName String? @map("first_name")
+  lastName  String? @map("last_name")
+  phone     String?
+  avatarUrl String? @map("avatar_url")
 
-  @@map("user_credential")
-  @@schema("auth")
+  address    String?
+  city       String?
+  state      String?
+  postalCode String? @map("postal_code")
+  country    String?
+
+  identity Identity?
+
+  @@map("internal_identity")
 }
 
 model Application {
-  id          String @id @default(uuid())
-  displayName String @map("display_name")
+  id               String             @id @default(uuid())
+  displayName      String             @map("display_name")
+  secret           String             @unique
+  enabledProviders IdentityProvider[] @map("enabled_providers")
+  allowedOrigins   String[]           @map("allowed_origins")
+  allowedRedirects String[]           @map("allowed_redirects")
 
-  usersOnApplications UsersOnApplications[]
+  users    UsersOnApplications[]
+  sessions Session[]
 
   @@map("application")
-  @@schema("public")
 }
 
 model UsersOnApplications {
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String @map("user_id")
+  applicationId String @map("application_id")
 
-  applicationId String
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@id([userId, applicationId])
   @@map("users_on_applications")
-  @@schema("public")
+}
+
+// Sessions are issued
+// 1 user can have one active session per application
+model Session {
+  id               String    @id @default(uuid())
+  userId           String    @map("user_id")
+  applicationId    String    @map("application_id")
+  created          DateTime  @default(now())
+  expires          DateTime
+  lastActive       DateTime  @default(now()) @map("last_active")
+  revoked          DateTime?
+  refreshTokenHash String    @map("refresh_token_hash")
+  active           Boolean   @default(true)
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  userAgent   UserAgent?
+
+  @@map("session")
+}
+
+model UserAgent {
+  id      String @id @default(uuid())
+  ip      String
+  browser String
+  os      String
+  device  String
+
+  sessionId String  @unique @map("session_id")
+  session   Session @relation(fields: [sessionId], references: [id], onUpdate: Cascade)
+
+  @@map("user_agent")
 }
